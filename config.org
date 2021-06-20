@@ -1,0 +1,185 @@
+#+TITLE: Emacs Config
+#+AUTHOR: Jonathan Merritt
+#+TOC: true
+
+Some initial inspiration: https://jamiecollinson.com/blog/my-emacs-config/
+
+* Setup
+
+** Configure package sources
+
+Add repositories from which we'll load packages. Setting =package-enable-at-startup= to =nil= prevents a second package load and slightly improves startup time.
+
+#+BEGIN_SRC emacs-lisp
+  (setq package-enable-at-startup nil)
+  (setq package-archives
+	'(("gnu" . "https://mirrors.163.com/elpa/gnu")
+	  ("melpa" . "https://melpa.org/packages/")
+	  ("org" . "http://orgmode.org/elpa/")))
+#+END_SRC
+
+** Bootstrap =use-package=
+
+If =use-package= is not installed, install it.
+
+#+BEGIN_SRC emacs-lisp
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package)
+    (eval-when-compile (require 'use-package)))
+#+END_SRC
+
+By default, we want all packages to be installed:
+
+#+BEGIN_SRC emacs-lisp
+  (require 'use-package-ensure)
+  (setq use-package-always-ensure t)
+#+END_SRC
+
+** Benchmark startup
+
+=benchmark-init= records startup time by package. It only records after it has been initialized, so include it as early as possible.
+
+#+BEGIN_SRC emacs-lisp
+  ; Temporary fix for this issue:
+  ; https://github.com/dholm/benchmark-init-el/issues/15
+  (define-advice define-obsolete-function-alias (:filter-args (ll) fix-obsolete)
+    (let ((obsolete-name (pop ll))
+	  (current-name (pop ll))
+	  (when (if ll (pop ll) "1"))
+	  (docstring (if ll (pop ll) nil)))
+      (list obsolete-name current-name when docstring)))
+  (use-package benchmark-init
+    :config
+    ; Disable collection of benchmark data after init is done.
+    (add-hook 'after-init-hook 'benchmark-init/deactivate))
+  (add-hook
+   'after-init-hook
+   (lambda () (message "loaded in %s" (emacs-init-time))))
+#+END_SRC
+
+* Preferences
+
+Don't display the help screen on startup.
+
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-screen t)
+#+END_SRC
+
+Turn off unwanted window decoration.
+
+#+BEGIN_SRC emacs-lisp
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+#+END_SRC
+
+Disable the error bell.
+
+#+BEGIN_SRC emacs-lisp
+  (setq ring-bell-function 'ignore)
+#+END_SRC
+
+Globally map the ESC key to quit prompts.
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+END_SRC
+
+* EVIL Mode
+
+Evil is the vi layer for emacs.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :init (evil-mode 1))
+#+END_SRC
+
+* Appearance
+
+Use a nice theme.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package doom-themes
+    :init (load-theme 'doom-nord t))
+#+END_SRC
+
+And use a nice font.
+
+#+BEGIN_SRC emacs-lisp
+  (set-face-attribute
+    'default nil
+    :font "JetBrains Mono"
+    :height 140)
+#+END_SRC
+
+Install the =all-the-icons= font. The first time this is installed, you will need to run =M-x all-the-icons-install-fonts=. This is required at least for the =doom-modeline= package.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package all-the-icons)
+#+END_SRC
+
+Set up the Doom modeline.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package doom-modeline
+    :diminish
+    :init (doom-modeline-mode 1))
+#+END_SRC
+
+* Completion
+
+Ivy is a general completions framework.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :diminish
+    :init (ivy-mode 1)
+    :bind (
+      :map ivy-minibuffer-map
+      ("C-j" . ivy-next-line)
+      ("C-k" . ivy-previous-line)
+      :map ivy-switch-buffer-map
+      ("C-j" . ivy-next-line)
+      ("C-k" . ivy-previous-line)
+      :map ivy-reverse-i-search-map
+      ("C-j" . ivy-next-line)
+      ("C-k" . ivy-previous-line)))
+#+END_SRC
+
+Ivy-rich is a more friendly Ivy.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy-rich
+    :init (ivy-rich-mode 1))
+#+END_SRC
+
+  Counsel includes various completions on top of Ivy.
+
+#+BEGIN_SRC emacs-lisp
+    (use-package counsel
+      :bind ("M-x"     . counsel-M-x)
+	    ("C-x b"   . counsel-ibuffer)
+	    ("C-x C-f" . counsel-find-file))
+#+END_SRC
+
+Helpful provides extra help.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helpful
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command]  . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key]      . helpful-key))
+#+END_SRC
+
+* Magit
+
+Magit is a git interface.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit)
+#+END_SRC
