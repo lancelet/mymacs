@@ -136,6 +136,14 @@ Set up the Doom modeline.
     :init (doom-modeline-mode 1))
 #+END_SRC
 
+Use =winum=, which provides window numbers.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package winum
+    :diminish
+    :init (winum-mode 1))
+#+END_SRC
+
 * Completion
 
 Ivy is a general completions framework.
@@ -229,6 +237,15 @@ Magit is a git interface.
       "ss" '(swiper :which-key "buffer")
       ;; WINDOW
       "w"  '(:ignore t :which-key "window")
+      "w0" '(winum-select-window-0 :which-key "jump-0")
+      "w1" '(winum-select-window-1 :which-key "jump-1")
+      "w2" '(winum-select-window-2 :which-key "jump-2")
+      "w3" '(winum-select-window-3 :which-key "jump-3")
+      "w4" '(winum-select-window-4 :which-key "jump-4")
+      "w5" '(winum-select-window-5 :which-key "jump-5")
+      "w6" '(winum-select-window-6 :which-key "jump-6")
+      "w7" '(winum-select-window-7 :which-key "jump-7")
+      "w8" '(winum-select-window-8 :which-key "jump-8")
       "wd" '(delete-window :which-key "delete")
     )
   )
