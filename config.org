@@ -171,13 +171,19 @@ Ivy-rich is a more friendly Ivy.
     :init (ivy-rich-mode 1))
 #+END_SRC
 
-  Counsel includes various completions on top of Ivy.
+=smex= remembers =M-x= commands.
 
 #+BEGIN_SRC emacs-lisp
-    (use-package counsel
-      :bind ("M-x"     . counsel-M-x)
-	    ("C-x b"   . counsel-ibuffer)
-	    ("C-x C-f" . counsel-find-file))
+  (use-package smex)
+#+END_SRC
+
+Counsel includes various completions on top of Ivy.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :bind ("M-x"     . counsel-M-x)
+	  ("C-x b"   . counsel-ibuffer)
+	  ("C-x C-f" . counsel-find-file))
 #+END_SRC
 
 Helpful provides extra help.
@@ -192,6 +198,15 @@ Helpful provides extra help.
     ([remap describe-command]  . helpful-command)
     ([remap describe-variable] . counsel-describe-variable)
     ([remap describe-key]      . helpful-key))
+#+END_SRC
+
+* Projectile
+
+Projectile is a project-interaction package.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :init (projectile-mode 1))
 #+END_SRC
 
 * Magit
@@ -232,9 +247,16 @@ Magit is a git interface.
       ;; GIT
       "g"  '(:ignore t :which-key "git")
       "gs" '(magit-status :which-key "status")
+      ;; PROJECT
+      "p"  '(:ignore t :which-key "project")
+      "pf" '(projectile-find-file :which-key "file/open")
       ;; SEARCH
       "s"  '(:ignore t :which-key "search")
       "ss" '(swiper :which-key "buffer")
+      ;; TOGGLE
+      "t"  '(:ignore t :which-key "toggle")
+      "tf" '(display-fill-column-indicator-mode :which-key "fill-col")
+      "tn" '(linum-mode :which-key "line-numbers")
       ;; WINDOW
       "w"  '(:ignore t :which-key "window")
       "w0" '(winum-select-window-0 :which-key "jump-0")
