@@ -192,3 +192,14 @@ Magit is a git interface.
 #+BEGIN_SRC emacs-lisp
   (use-package magit)
 #+END_SRC
+  
+* Key Bindings
+
+=which-key= shows available keys following a prefix.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :diminish
+    :init (which-key-mode)
+    :config (setq which-key-idle-delay 0.3))
+#+END_SRC
