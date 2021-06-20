@@ -13,7 +13,7 @@ Add repositories from which we'll load packages. Setting =package-enable-at-star
 #+BEGIN_SRC emacs-lisp
   (setq package-enable-at-startup nil)
   (setq package-archives
-	'(("gnu" . "https://mirrors.163.com/elpa/gnu")
+	'(("gnu" . "https://elpa.gnu.org/packages/")
 	  ("melpa" . "https://melpa.org/packages/")
 	  ("org" . "http://orgmode.org/elpa/")))
 #+END_SRC
@@ -215,7 +215,7 @@ Magit is a git interface.
       :keymaps 'normal
       ;; BUFFER
       "b"  '(:ignore t :which-key "buffer")
-      "bd" '(kill-buffer :which-key "kill")
+      "bd" '(kill-this-buffer :which-key "kill")
       ;; FILE
       "f"  '(:ignore t :which-key "file")
       "ff" '(counsel-find-file :which-key "find/open")
