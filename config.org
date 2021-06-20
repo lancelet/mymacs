@@ -203,3 +203,25 @@ Magit is a git interface.
     :init (which-key-mode)
     :config (setq which-key-idle-delay 0.3))
 #+END_SRC
+
+=general= is a central place for keymap management.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package general
+    :init
+    (general-create-definer mymacs-leader-def
+      :prefix "SPC")
+    (mymacs-leader-def
+      :keymaps 'normal
+      ;; FILE
+      "f"  '(:ignore t :which-key "file")
+      "ff" '(counsel-find-file :which-key "find/open")
+      ;; GIT
+      "g"  '(:ignore t :which-key "git")
+      "gs" '(magit-status :which-key "status")
+      ;; WINDOW
+      "w"  '(:ignore t :which-key "window")
+      "wd" '(delete-window :which-key "delete")
+    )
+  )
+#+END_SRC
