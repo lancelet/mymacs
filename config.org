@@ -94,6 +94,7 @@ Evil is the vi layer for emacs.
     :init  
     (setq evil-want-integration t)
     (setq evil-want-keybinding nil)
+    (setq evil-want-C-u-scroll t)
     (evil-mode 1))
 #+END_SRC
 
@@ -215,6 +216,7 @@ Magit is a git interface.
       :keymaps 'normal
       ;; BUFFER
       "b"  '(:ignore t :which-key "buffer")
+      "bb" '(counsel-switch-buffer :which-key "switch")
       "bd" '(kill-this-buffer :which-key "kill")
       ;; FILE
       "f"  '(:ignore t :which-key "file")
@@ -222,6 +224,9 @@ Magit is a git interface.
       ;; GIT
       "g"  '(:ignore t :which-key "git")
       "gs" '(magit-status :which-key "status")
+      ;; SEARCH
+      "s"  '(:ignore t :which-key "search")
+      "ss" '(swiper :which-key "buffer")
       ;; WINDOW
       "w"  '(:ignore t :which-key "window")
       "wd" '(delete-window :which-key "delete")
