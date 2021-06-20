@@ -213,6 +213,9 @@ Magit is a git interface.
       :prefix "SPC")
     (mymacs-leader-def
       :keymaps 'normal
+      ;; BUFFER
+      "b"  '(:ignore t :which-key "buffer")
+      "bd" '(kill-buffer :which-key "kill")
       ;; FILE
       "f"  '(:ignore t :which-key "file")
       "ff" '(counsel-find-file :which-key "find/open")
@@ -224,4 +227,35 @@ Magit is a git interface.
       "wd" '(delete-window :which-key "delete")
     )
   )
+#+END_SRC
+
+* LANGUAGES
+
+** LSP
+
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+    :hook (scala-mode . lsp)
+	  (lsp-mode   . lsp-lens-mode)
+    :config (setq lsp-prefer-flymake nil))
+  (use-package lsp-metals)
+  (use-package lsp-ui)
+#+END_SRC
+
+** Flycheck
+
+Flycheck is a general framework for rendering diagnostics, etc.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :init (global-flycheck-mode))
+#+END_SRC
+
+** Scala
+
+Scala mode.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package scala-mode
+    :interpreter ("scala" . scala-mode))
 #+END_SRC
