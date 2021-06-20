@@ -107,3 +107,49 @@
 (use-package doom-themes
   :init (load-theme 'doom-palenight t))
 
+;; Evil mode
+(defun mymacs/evil-hook ()
+  (dolist
+      (mode
+       '(git-rebase-mode))
+    (add-to-list 'evil-emacs-state-modes mode)))
+
+(use-package evil
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump nil)
+  :hook (evil-mode . mymacs/evil-hook)
+  (evil-mode 1)
+  :config
+  (define-key
+    evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  (define-key
+    evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+
+  ;; Use visual line motions even outside of visual-line-mode buffers
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal))
+
+;; Key bindings
+;;   - global-set-key: globally set a key
+;;   - define-key: set keybindings for a specific keymap (eg. for a single mode)
+;;   - bind inside use-package
+;;   - general.el for global keybindings
+(use-package general
+  :config
+  (general-define-key
+   "C-M-j" 'counsel-switch-buffer)
+  (general-create-definer mymacs/leader-keys
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+  (mymacs/leader-keys
+    "t"  '(:ignore t :which-key "toggles")
+    "tt" '(counsel-load-theme :which-key "choose theme")))
+
+
