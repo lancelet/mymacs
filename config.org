@@ -88,7 +88,7 @@ Globally map the ESC key to quit prompts.
 Set the fill column to 80.
 
 #+BEGIN_SRC emacs-lisp
-  (set-fill-column 80)
+  (setq-default fill-column 80)
 #+END_SRC
 
 * EVIL Mode
@@ -96,12 +96,19 @@ Set the fill column to 80.
 Evil is the vi layer for emacs.
 
 #+BEGIN_SRC emacs-lisp
+  (defun mymacs/evil-hook ()
+    dolist
+      (mode
+	'(git-rebase-mode))
+      (add-to-list 'emacs-evil-state-modes mode)) 
   (use-package evil
     :init  
     (setq evil-want-integration t)
     (setq evil-want-keybinding nil)
     (setq evil-want-C-u-scroll t)
-    (evil-mode 1))
+    (evil-mode 1)
+    :hook
+    (evil-mode . mymacs/evil-hook))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -243,6 +250,16 @@ Magit is a git interface.
       :prefix "SPC")
     (mymacs-leader-def
       :keymaps 'normal
+      ;; FAST WINDOW SWITCHING
+      "0"  '(winum-select-window-0 :which-key "window-0")
+      "1"  '(winum-select-window-1 :which-key "window-1")
+      "2"  '(winum-select-window-2 :which-key "window-2")
+      "3"  '(winum-select-window-3 :which-key "window-3")
+      "4"  '(winum-select-window-4 :which-key "window-4")
+      "5"  '(winum-select-window-5 :which-key "window-5")
+      "6"  '(winum-select-window-6 :which-key "window-6")
+      "7"  '(winum-select-window-7 :which-key "window-7")
+      "8"  '(winum-select-window-8 :which-key "window-8")
       ;; BUFFER
       "b"  '(:ignore t :which-key "buffer")
       "bb" '(counsel-switch-buffer :which-key "switch")
@@ -265,15 +282,6 @@ Magit is a git interface.
       "tn" '(linum-mode :which-key "line-numbers")
       ;; WINDOW
       "w"  '(:ignore t :which-key "window")
-      "w0" '(winum-select-window-0 :which-key "jump-0")
-      "w1" '(winum-select-window-1 :which-key "jump-1")
-      "w2" '(winum-select-window-2 :which-key "jump-2")
-      "w3" '(winum-select-window-3 :which-key "jump-3")
-      "w4" '(winum-select-window-4 :which-key "jump-4")
-      "w5" '(winum-select-window-5 :which-key "jump-5")
-      "w6" '(winum-select-window-6 :which-key "jump-6")
-      "w7" '(winum-select-window-7 :which-key "jump-7")
-      "w8" '(winum-select-window-8 :which-key "jump-8")
       "wd" '(delete-window :which-key "delete")
     )
   )
